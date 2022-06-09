@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  downloads:
+    build:
+      context: .
+      network: host
+    ports:
+      - "22022:22"
+
