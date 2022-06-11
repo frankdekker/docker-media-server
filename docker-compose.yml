@@ -1,5 +1,16 @@
 version: '2.1'
 services:
+  lighttpd-dashboard:
+    container_name: lighttpd-dashboard
+    image: sebp/lighttpd
+    volumes:
+      - './dashboard/:/var/www/localhost/htdocs'
+    ports:
+      - "80:80"
+    tty: true
+    restart: unless-stopped
+
+
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
@@ -13,6 +24,9 @@ services:
       - '81:80'
       - '53:53/tcp'
       - '53:53/udp'
+    dns:
+      - 127.0.0.1
+      - 8.8.8.8
     restart: unless-stopped
 
 

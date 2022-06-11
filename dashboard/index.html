@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.98.0">
+    <title>Frank's Plex</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/starter-template/">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="col-lg-8 mx-auto p-3 py-md-5">
+    <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+        <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+            <span class="fs-4">Frank's plex starter page</span>
+        </a>
+    </header>
+
+    <div class="container">
+        <a href="/admin" data-role="link" data-port="81" class="btn btn-lg btn-primary"> Pi.hole admin </a>
+        <a href="/web/index.html" data-role="link" data-port="32400" class="btn btn-lg btn-primary"> Plex admin </a>
+        <a href="/" data-role="link" data-port="9091" class="btn btn-lg btn-primary"> Transmission </a>
+    </div>
+
+</div>
+
+<script>
+    document.querySelectorAll('[data-role=link]').forEach((el) => {
+        el.addEventListener('click', (event) => {
+            event.target.port=parseInt(el.dataset.port);
+        });
+    })
+</script>
+
+</body>
+</html>
