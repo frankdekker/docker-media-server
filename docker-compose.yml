@@ -114,7 +114,7 @@ services:
 #    restart: unless-stopped
 #
   sonarr:
-    image: linuxserver/sonarr:preview
+    image: lscr.io/linuxserver/sonarr:latest
     network_mode: "service:transmission-openvpn"
     container_name: sonarr
     environment:
