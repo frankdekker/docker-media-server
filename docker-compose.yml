@@ -1,9 +1,45 @@
-version: "3.9"
+version: '2.1'
 services:
-  downloads:
-    build:
-      context: .
-      network: host
+  transmission-openvpn:
+    image: haugene/transmission-openvpn
+    environment:
+      - PUID=1000
+      - PGID=100
+      - CREATE_TUN_DEVICE=true
+      - OPENVPN_PROVIDER=SURFSHARK
+      - OPENVPN_CONFIG=nl-ams_udp
+      - OPENVPN_USERNAME=${OPENVPN_USERNAME}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60
+      - WEBPROXY_ENABLED=false
+      - LOCAL_NETWORK=192.168.0.0/16
+      - TRANSMISSION_SCRAPE_PAUSED_TORRENTS_ENABLED=false
+      - DNS=8.8.8.8,8.8.4.4
+      - TRANSMISSION_ALT_SPEED_DOWN=76800
+      - TRANSMISSION_ALT_SPEED_ENABLED=true
+      - TRANSMISSION_ALT_SPEED_TIME_BEGIN=360
+      - TRANSMISSION_ALT_SPEED_TIME_DAY=127
+      - TRANSMISSION_ALT_SPEED_TIME_ENABLED=true
+      - TRANSMISSION_ALT_SPEED_TIME_END=1380
+      - TRANSMISSION_ALT_SPEED_UP=10240
+      - TRANSMISSION_IDLE_SEEDING_LIMIT=5
+      - TRANSMISSION_IDLE_SEEDING_LIMIT_ENABLED=true
+      - TRANSMISSION_DOWNLOAD_DIR=/data/completed
+      - TRANSMISSION_INCOMPLETE_DIR=/data/incomplete
+      - TRANSMISSION_WATCH_DIR=/data/watch
+      - TRANSMISSION_HOME=/data/transmission-home
+      - TRANSMISSION_WEB_UI=flood-for-transmission
+    volumes:
+      - /home/fdekker/transmission/:/data
+      - /etc/localtime:/etc/localtime:ro
     ports:
-      - "22022:22"
+      - 20091:9091 # Transmission
+    cap_add:
+      - NET_ADMIN
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+    restart: always
+
 
