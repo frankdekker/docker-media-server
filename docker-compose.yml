@@ -64,7 +64,7 @@ services:
       - TRANSMISSION_HOME=/data/transmission-home
       - TRANSMISSION_WEB_UI=flood-for-transmission
     volumes:
-      - '${MEDIA_HOME}/media2/:/data/completed'
+      - '${MEDIA_HOME}/media/:/data/completed'
       - '${MEDIA_HOME}/transmission/incomplete/:/data/incomplete'
       - '${MEDIA_HOME}/transmission/transmission-home:/data/transmission-home'
       - '${MEDIA_HOME}/transmission/watch/:/data/watch'
