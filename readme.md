@@ -16,7 +16,7 @@
 
 Run in background
 ```shell
-docker-compose -d up
+docker-compose up --detach
 ```
 
 ## Maintenance
