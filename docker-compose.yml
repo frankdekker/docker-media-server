@@ -32,7 +32,8 @@ services:
 
   transmission-openvpn:
     container_name: transmission-openvpn
-    image: haugene/transmission-openvpn
+    build:
+      context: ./docker/transmission/
     environment:
       - PUID=1000
       - PGID=100
@@ -55,6 +56,8 @@ services:
       - TRANSMISSION_ALT_SPEED_UP=10240
       - TRANSMISSION_IDLE_SEEDING_LIMIT=5
       - TRANSMISSION_IDLE_SEEDING_LIMIT_ENABLED=true
+      - TRANSMISSION_SCRIPT_TORRENT_DONE_ENABLED=true
+      - TRANSMISSION_SCRIPT_TORRENT_DONE_FILENAME=/usr/bin/remove-torrent.sh
       - TRANSMISSION_DOWNLOAD_DIR=/data/completed
       - TRANSMISSION_INCOMPLETE_DIR=/data/incomplete
       - TRANSMISSION_WATCH_DIR=/data/watch
