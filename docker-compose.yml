@@ -71,6 +71,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - '9091:9091' # Transmission
+      - '9117:9117' # Jackett
+      - '7878:7878' # Radarr
+      - '8989:8989' # Sonarr
     cap_add:
       - NET_ADMIN
     logging:
@@ -119,8 +122,6 @@ services:
       - PGID=100
       - TZ=Europe/Amsterdam
       - UMASK_SET=022 #optional
-    ports:
-      - '8989:8989'
     volumes:
       - /var/lib/appdata/sonarr:/config
       - '${MEDIA_HOME}/media/tv:/tv'
