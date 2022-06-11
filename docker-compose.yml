@@ -18,8 +18,8 @@ services:
       - TZ=Europe/Amsterdam
       - WEBPASSWORD=${PIHOLE_PASSWORD}
     volumes:
-      - '/home/fdekker/etc-pihole:/etc/pihole'
-      - '/home/fdekker/etc-dnsmasq.d:/etc/dnsmasq.d'
+      - '${MEDIA_HOME}/etc-pihole:/etc/pihole'
+      - '${MEDIA_HOME}/etc-dnsmasq.d:/etc/dnsmasq.d'
     ports:
       - '81:80'
       - '53:53/tcp'
@@ -61,7 +61,10 @@ services:
       - TRANSMISSION_HOME=/data/transmission-home
       - TRANSMISSION_WEB_UI=flood-for-transmission
     volumes:
-      - '/home/fdekker/transmission/:/data'
+      - '${MEDIA_HOME}/media2/:/data/completed'
+      - '${MEDIA_HOME}/transmission/incomplete/:/data/incomplete'
+      - '${MEDIA_HOME}/transmission/transmission-home:/data/transmission-home'
+      - '${MEDIA_HOME}/transmission/watch/:/data/watch'
       - /etc/localtime:/etc/localtime:ro
     ports:
       - '9091:9091' # Transmission
