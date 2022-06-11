@@ -26,15 +26,17 @@
         <a href="/admin" data-role="link" data-port="81" class="btn btn-lg btn-primary"> Pi.hole admin </a>
         <a href="/web/index.html" data-role="link" data-port="32400" class="btn btn-lg btn-primary"> Plex admin </a>
         <a href="/" data-role="link" data-port="9091" class="btn btn-lg btn-primary"> Transmission </a>
+        <a href="/" data-role="link" data-port="8989" class="btn btn-lg btn-primary"> Sonarr </a>
+        <a href="/" data-role="link" data-port="7878" class="btn btn-lg btn-primary"> Radarr </a>
+        <a href="/" data-role="link" data-port="9117" class="btn btn-lg btn-primary"> Jackett </a>
+        <a href="/" data-role="link" data-port="8191" class="btn btn-lg btn-primary"> Flaresolverr </a>
     </div>
 
 </div>
 
 <script>
     document.querySelectorAll('[data-role=link]').forEach((el) => {
-        el.addEventListener('click', (event) => {
-            event.target.port=parseInt(el.dataset.port);
-        });
+        el.addEventListener('click', event => event.target.port = parseInt(el.dataset.port));
     })
 </script>
 

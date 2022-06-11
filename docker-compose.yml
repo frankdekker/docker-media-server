@@ -64,7 +64,7 @@ services:
       - TRANSMISSION_HOME=/data/transmission-home
       - TRANSMISSION_WEB_UI=flood-for-transmission
     volumes:
-      - '${MEDIA_HOME}/media:/data/completed'
+      - '${MEDIA_HOME}/media/downloads:/data/completed'
       - '${MEDIA_HOME}/transmission/incomplete/:/data/incomplete'
       - '${MEDIA_HOME}/transmission/transmission-home:/data/transmission-home'
       - '${MEDIA_HOME}/transmission/watch/:/data/watch'
@@ -72,6 +72,7 @@ services:
     ports:
       - '9091:9091' # Transmission
       - '9117:9117' # Jackett
+      - '8191:8191' # Flaresolverr
       - '7878:7878' # Radarr
       - '8989:8989' # Sonarr
     cap_add:
@@ -82,21 +83,34 @@ services:
         max-size: 10m
     restart: unless-stopped
 
-#
-#  jackett:
-#    image: linuxserver/jackett
-#    network_mode: "service:transmission-openvpn"
-#    container_name: jackett
-#    environment:
-#      - PUID=1000
-#      - PGID=100
-#      - TZ=Europe/Amsterdam
-#      - AUTO_UPDATE=true #optional
-#      - RUN_OPTS=#optional
-#    volumes:
-#      - /var/lib/appdata/jackett:/config
-#      - '${MEDIA_HOME}/transmission/watch:/downloads'
-#    restart: unless-stopped
+
+  jackett:
+    image: linuxserver/jackett
+    network_mode: "service:transmission-openvpn"
+    container_name: jackett
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Amsterdam
+      - AUTO_UPDATE=true #optional
+      - RUN_OPTS=#optional
+    volumes:
+      - /var/lib/appdata/jackett:/config
+      - '${MEDIA_HOME}/transmission/watch:/downloads'
+    restart: unless-stopped
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    network_mode: "service:transmission-openvpn"
+    container_name: flaresolverr
+    environment:
+      - PUID=1000
+      - PGID=100
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=Europe/Amsterdam
+    restart: unless-stopped
 
 #  radarr:
 #    image: linuxserver/radarr:nightly
@@ -113,17 +127,17 @@ services:
 #      - /mnt/Download/downloads/completed:/downloads
 #    restart: unless-stopped
 #
-#  sonarr:
-#    image: lscr.io/linuxserver/sonarr:latest
-#    network_mode: "service:transmission-openvpn"
-#    container_name: sonarr
-#    environment:
-#      - PUID=1000
-#      - PGID=100
-#      - TZ=Europe/Amsterdam
-#      - UMASK_SET=022 #optional
-#    volumes:
-#      - /var/lib/appdata/sonarr:/config
-#      - '${MEDIA_HOME}/media/tv:/tv'
-#      - '${MEDIA_HOME}/media/downloads:/downloads'
-#    restart: unless-stopped
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    network_mode: "service:transmission-openvpn"
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Amsterdam
+      - UMASK_SET=022 #optional
+    volumes:
+      - /var/lib/appdata/sonarr:/config
+      - '${MEDIA_HOME}/media/tv:/tv'
+      - '${MEDIA_HOME}/media/downloads:/downloads'
+    restart: unless-stopped
