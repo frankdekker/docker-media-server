@@ -64,7 +64,7 @@ services:
       - TRANSMISSION_HOME=/data/transmission-home
       - TRANSMISSION_WEB_UI=flood-for-transmission
     volumes:
-      - '${MEDIA_HOME}/media/:/data/completed'
+      - '${MEDIA_HOME}/media/downloads:/data/completed'
       - '${MEDIA_HOME}/transmission/incomplete/:/data/incomplete'
       - '${MEDIA_HOME}/transmission/transmission-home:/data/transmission-home'
       - '${MEDIA_HOME}/transmission/watch/:/data/watch'
@@ -80,3 +80,49 @@ services:
     restart: unless-stopped
 
 
+  jackett:
+    image: linuxserver/jackett
+    network_mode: "service:transmission-openvpn"
+    container_name: jackett
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Amsterdam
+      - AUTO_UPDATE=true #optional
+      - RUN_OPTS=#optional
+    volumes:
+      - /var/lib/appdata/jackett:/config
+      - '${MEDIA_HOME}/transmission/watch:/downloads'
+    restart: unless-stopped
+
+#  radarr:
+#    image: linuxserver/radarr:nightly
+#    network_mode: "service:transmission-openvpn"
+#    container_name: radarr
+#    environment:
+#      - PUID=1024
+#      - PGID=100
+#      - TZ=Europe/Amsterdam
+#      - UMASK_SET=022 #optional
+#    volumes:
+#      - /var/lib/appdata/radarr:/config
+#      - /mnt/Download/media/movies:/movies
+#      - /mnt/Download/downloads/completed:/downloads
+#    restart: unless-stopped
+#
+  sonarr:
+    image: linuxserver/sonarr:preview
+    network_mode: "service:transmission-openvpn"
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Amsterdam
+      - UMASK_SET=022 #optional
+    ports:
+      - '8989:8989'
+    volumes:
+      - /var/lib/appdata/sonarr:/config
+      - '${MEDIA_HOME}/media/tv:/tv'
+      - '${MEDIA_HOME}/media/downloads:/downloads'
+    restart: unless-stopped
