@@ -18,7 +18,17 @@
 
 ## Maintenance
 
+Clean up non-running containers
 ```shell
 docker container prune
+```
+
+Follow logs
+```shell
+docker-compose logs --tail=2 --follow
+```
+
+List images
+```shell
 docker images
 ```

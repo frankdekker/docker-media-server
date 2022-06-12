@@ -39,7 +39,7 @@ services:
       - PGID=100
       - CREATE_TUN_DEVICE=true
       - OPENVPN_PROVIDER=SURFSHARK
-      - OPENVPN_CONFIG=nl-ams_udp
+      - OPENVPN_CONFIG=nl-ams_tcp
       - OPENVPN_USERNAME=${OPENVPN_USERNAME}
       - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
       - OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60
@@ -58,13 +58,13 @@ services:
       - TRANSMISSION_IDLE_SEEDING_LIMIT_ENABLED=true
       - TRANSMISSION_SCRIPT_TORRENT_DONE_ENABLED=true
       - TRANSMISSION_SCRIPT_TORRENT_DONE_FILENAME=/usr/bin/remove-torrent.sh
-      - TRANSMISSION_DOWNLOAD_DIR=/data/completed
+      - TRANSMISSION_DOWNLOAD_DIR=/downloads
       - TRANSMISSION_INCOMPLETE_DIR=/data/incomplete
       - TRANSMISSION_WATCH_DIR=/data/watch
       - TRANSMISSION_HOME=/data/transmission-home
       - TRANSMISSION_WEB_UI=flood-for-transmission
     volumes:
-      - '${MEDIA_HOME}/media/downloads:/data/completed'
+      - '${MEDIA_HOME}/media/downloads:/downloads'
       - '${MEDIA_HOME}/transmission/incomplete/:/data/incomplete'
       - '${MEDIA_HOME}/transmission/transmission-home:/data/transmission-home'
       - '${MEDIA_HOME}/transmission/watch/:/data/watch'
