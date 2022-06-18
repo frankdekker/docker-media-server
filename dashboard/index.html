@@ -12,6 +12,19 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+    <style>
+        .btn-width {
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 800px) {
+            .btn-width {
+                display: block;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -23,13 +36,14 @@
     </header>
 
     <div class="container">
-        <a href="/admin" data-role="link" data-port="81" class="btn btn-lg btn-primary"> Pi.hole admin </a>
-        <a href="/web/index.html" data-role="link" data-port="32400" class="btn btn-lg btn-primary"> Plex admin </a>
-        <a href="/" data-role="link" data-port="9091" class="btn btn-lg btn-primary"> Transmission </a>
-        <a href="/" data-role="link" data-port="8989" class="btn btn-lg btn-primary"> Sonarr </a>
-        <a href="/" data-role="link" data-port="7878" class="btn btn-lg btn-primary"> Radarr </a>
-        <a href="/" data-role="link" data-port="9117" class="btn btn-lg btn-primary"> Jackett </a>
-        <a href="/" data-role="link" data-port="8191" class="btn btn-lg btn-primary"> Flaresolverr </a>
+
+        <a href="/admin" data-role="link" data-port="81" class="btn-width btn btn-lg btn-secondary"> Pi.hole admin </a>
+        <a href="/web/index.html" data-role="link" data-port="32400" class="btn-width btn btn-lg btn-primary"> Plex admin </a>
+        <a href="/" data-role="link" data-port="9091" class="btn-width btn btn-lg btn-dark"> Transmission </a>
+        <a href="/" data-role="link" data-port="8989" class="btn-width btn btn-lg btn-success"> Sonarr </a>
+        <a href="/" data-role="link" data-port="7878" class="btn-width btn btn-lg btn-danger"> Radarr </a>
+        <a href="/" data-role="link" data-port="9117" class="btn-width btn btn-lg btn-warning"> Jackett </a>
+        <a href="/" data-role="link" data-port="8191" class="btn-width btn btn-lg btn-info"> Flaresolverr </a>
     </div>
 
 </div>
