@@ -9,12 +9,15 @@
 
 ### Services
 
-| port   | service      |
-|--------|--------------|
-| 80     | dashboard    |
-| 81     | pi.hole      |
-| 32400  | plex         |
-| 9091   | transmission |
+| port  | service             | description                          |
+|-------|---------------------|--------------------------------------|
+| 80    | dashboard           | quicklinks to all applications       | 
+| 81    | pi.hole             | block adds via dns in your network   |
+| 9091  | transmission        | torrent client                       | 
+| 9117  | Jackett             | torrent feeder for sonarr and radarr |
+| 8191  | Flaresolverr        | cloud flare site protection solver   |
+| 7878  | Radarr              | movie scheduler                      |
+| 8989  | Sonarr              | series scheduler                     | 
 
 ## Maintenance
 

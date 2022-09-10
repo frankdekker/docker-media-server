@@ -37,8 +37,8 @@ services:
       - PUID=1000
       - PGID=100
       - CREATE_TUN_DEVICE=true
-      - OPENVPN_PROVIDER=SURFSHARK
-      - OPENVPN_CONFIG=nl-ams_tcp
+      - OPENVPN_PROVIDER=${OPENVPN_PROVIDER:-SURFSHARK}
+      - OPENVPN_CONFIG=${OPENVPN_CONFIG:-nl-ams_tcp}
       - OPENVPN_USERNAME=${OPENVPN_USERNAME}
       - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
       - OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60
@@ -111,21 +111,21 @@ services:
       - TZ=Europe/Amsterdam
     restart: unless-stopped
 
-#  radarr:
-#    image: linuxserver/radarr:nightly
-#    network_mode: "service:transmission-openvpn"
-#    container_name: radarr
-#    environment:
-#      - PUID=1024
-#      - PGID=100
-#      - TZ=Europe/Amsterdam
-#      - UMASK_SET=022 #optional
-#    volumes:
-#      - /var/lib/appdata/radarr:/config
-#      - /mnt/Download/media/movies:/movies
-#      - /mnt/Download/downloads/completed:/downloads
-#    restart: unless-stopped
-#
+  radarr:
+    image: linuxserver/radarr:nightly
+    network_mode: "service:transmission-openvpn"
+    container_name: radarr
+    environment:
+      - PUID=1024
+      - PGID=100
+      - TZ=Europe/Amsterdam
+      - UMASK_SET=022 #optional
+    volumes:
+      - /var/lib/appdata/sonarr:/config
+      - '${MEDIA_HOME}/media/movies:/movies'
+      - '${MEDIA_HOME}/media/downloads:/downloads'
+    restart: unless-stopped
+
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     network_mode: "service:transmission-openvpn"
