@@ -121,7 +121,7 @@ services:
       - TZ=Europe/Amsterdam
       - UMASK_SET=022 #optional
     volumes:
-      - /var/lib/appdata/sonarr:/config
+      - /var/lib/appdata/radarr:/config
       - '${MEDIA_HOME}/media/movies:/movies'
       - '${MEDIA_HOME}/media/downloads:/downloads'
     restart: unless-stopped
