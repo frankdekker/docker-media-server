@@ -19,7 +19,18 @@
 | 7878  | Radarr              | movie scheduler                      |
 | 8989  | Sonarr              | series scheduler                     | 
 
-## Maintenance
+# Configuration
+
+## Setup Transmission in Sonarr and Radarr
+
+- Go to settings > Download client > Click the big plus > Scroll down to Transmission
+- Give it a name, and save
+
+## Configure indexers
+
+- Open jackett > add indexer > Follow instructions in jackett to add to sonarr 
+
+# Maintenance
 
 Clean up non-running containers
 ```shell
