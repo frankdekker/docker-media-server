@@ -1,4 +1,3 @@
-version: '2.1'
 services:
   lighttpd-dashboard:
     container_name: lighttpd-dashboard
@@ -32,13 +31,13 @@ services:
 
   transmission-openvpn:
     container_name: transmission-openvpn
-    image: haugene/transmission-openvpn
+    image: haugene/transmission-openvpn:4
     environment:
       - PUID=1000
       - PGID=100
       - CREATE_TUN_DEVICE=true
       - OPENVPN_PROVIDER=${OPENVPN_PROVIDER:-SURFSHARK}
-      - OPENVPN_CONFIG=${OPENVPN_CONFIG:-nl-ams_tcp}
+      - OPENVPN_CONFIG=nl-ams.prod.surfshark.com_tcp
       - OPENVPN_USERNAME=${OPENVPN_USERNAME}
       - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
       - OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60
@@ -112,7 +111,7 @@ services:
     restart: unless-stopped
 
   radarr:
-    image: linuxserver/radarr:nightly
+    image: linuxserver/radarr:latest
     network_mode: "service:transmission-openvpn"
     container_name: radarr
     environment:
