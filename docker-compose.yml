@@ -27,7 +27,11 @@ services:
       - 127.0.0.1
       - 8.8.8.8
     restart: unless-stopped
-
+    healthcheck:
+      test: curl localhost/admin/login.php --fail
+      interval: 1s
+      timeout: 5s
+      retries: 30
 
   transmission-openvpn:
     container_name: transmission-openvpn
@@ -80,7 +84,8 @@ services:
       options:
         max-size: 10m
     restart: unless-stopped
-
+    depends_on:
+      - pihole
 
   jackett:
     image: linuxserver/jackett
@@ -96,6 +101,8 @@ services:
       - /var/lib/appdata/jackett:/config
       - '${MEDIA_HOME}/transmission/watch:/downloads'
     restart: unless-stopped
+    depends_on:
+      - pihole
 
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
@@ -109,6 +116,8 @@ services:
       - CAPTCHA_SOLVER=none
       - TZ=Europe/Amsterdam
     restart: unless-stopped
+    depends_on:
+      - pihole
 
   radarr:
     image: linuxserver/radarr:latest
@@ -124,6 +133,9 @@ services:
       - '${MEDIA_HOME}/media/movies:/movies'
       - '${MEDIA_HOME}/media/downloads:/downloads'
     restart: unless-stopped
+    depends_on:
+      - pihole
+      - transmission-openvpn
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -139,3 +151,6 @@ services:
       - '${MEDIA_HOME}/media/tv:/tv'
       - '${MEDIA_HOME}/media/downloads:/downloads'
     restart: unless-stopped
+    depends_on:
+      - pihole
+      - transmission-openvpn
