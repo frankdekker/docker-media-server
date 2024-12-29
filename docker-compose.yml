@@ -78,8 +78,10 @@ services:
       - '8191:8191' # Flaresolverr
       - '7878:7878' # Radarr
       - '8989:8989' # Sonarr
+    devices:
+      - /dev/net/tun:/dev/net/tun
     cap_add:
-      - NET_ADMIN
+      - NET_ADMIN      
     logging:
       driver: json-file
       options:
