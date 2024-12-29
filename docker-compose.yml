@@ -70,6 +70,7 @@ services:
       - '${MEDIA_HOME}/transmission/incomplete/:/data/incomplete'
       - '${MEDIA_HOME}/transmission/transmission-home:/data/transmission-home'
       - '${MEDIA_HOME}/transmission/watch/:/data/watch'
+      - '/opt/transmission-openvpn/config/:/config'
       - /etc/localtime:/etc/localtime:ro
     ports:
       - '9091:9091' # Transmission
