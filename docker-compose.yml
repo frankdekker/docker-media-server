@@ -50,7 +50,7 @@ services:
 
   transmission-openvpn:
     container_name: transmission-openvpn
-    image: haugene/transmission-openvpn:latest
+    image: haugene/transmission-openvpn:4
     environment:
       - PUID=1000
       - PGID=100
