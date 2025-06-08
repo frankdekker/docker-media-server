@@ -32,6 +32,11 @@
 
 - Open jackett > add indexer > Follow instructions in jackett to add to sonarr 
 
+## Configure jellyfin + swag
+- https://jellyfin.org/docs/general/post-install/networking/advanced/letsencrypt/
+- Api token: https://dash.cloudflare.com/profile/api-tokens
+- DNS settings: Cloudflare: Home > Choose domain > DNS > records
+
 # Maintenance
 
 Clean up non-running containers
