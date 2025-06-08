@@ -17,3 +17,23 @@ services:
         read_only: true
     restart: 'unless-stopped'
 
+  swag:
+    image: linuxserver/swag
+    container_name: swag-jellyfin
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/Amsterdam
+      URL: jellyfin-fra.nkdekker.nl
+      SUBDOMAINS:
+      VALIDATION: dns
+      DNSPLUGIN: cloudflare
+      EMAIL: fdekker@gmail.com
+    ports:
+      - 8443:443
+      - 8080:80
+    volumes:
+      # contains cloudflare api token in /config/dns-conf/cloudflare.ini
+      # obtain api key at: https://dash.cloudflare.com/profile/api-tokens
+      - /opt/swag/config:/config
+    restart: 'unless-stopped'
