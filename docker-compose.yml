@@ -9,7 +9,6 @@ services:
     tty: true
     restart: unless-stopped
 
-
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
@@ -81,7 +80,7 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     cap_add:
-      - NET_ADMIN      
+      - NET_ADMIN
     logging:
       driver: json-file
       options:
@@ -157,3 +156,47 @@ services:
     depends_on:
       - pihole
       - transmission-openvpn
+
+  # jellyfin media server.
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    ports:
+      - 8096:8096
+    volumes:
+      - /opt/jellyfin/config:/config
+      - /opt/jellyfin/cache:/cache
+      # mount movie directory
+      - type: bind
+        source: /home/fdekker/media/movies
+        target: /media1
+        read_only: true
+      # mount shows directory
+      - type: bind
+        source: /mnt/samsung/tv
+        target: /media2
+        read_only: true
+    restart: 'unless-stopped'
+
+  # jellyfin reverse proxy with letsencrypt ssl via cloudflare api
+  # see https://jellyfin.org/docs/general/post-install/networking/advanced/letsencrypt/
+  swag:
+    image: linuxserver/swag
+    container_name: swag-jellyfin
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/Amsterdam
+      URL: jellyfin-fra.nkdekker.nl
+      SUBDOMAINS:
+      VALIDATION: dns
+      DNSPLUGIN: cloudflare
+      EMAIL: fdekker@gmail.com
+    ports:
+      - 8443:443
+    volumes:
+      # contains cloudflare api token in /config/dns-conf/cloudflare.ini
+      # obtain api key at: https://dash.cloudflare.com/profile/api-tokens
+      - /opt/swag/config:/config
+      - ./swag/jellyfin.subdomain.conf:/config/nginx/proxy-confs/jellyfin.subdomain.conf
+    restart: 'unless-stopped'

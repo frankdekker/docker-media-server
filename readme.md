@@ -9,15 +9,17 @@
 
 ### Services
 
-| port  | service             | description                          |
-|-------|---------------------|--------------------------------------|
-| 80    | dashboard           | quicklinks to all applications       | 
-| 81    | pi.hole             | block adds via dns in your network   |
-| 9091  | transmission        | torrent client                       | 
-| 9117  | Jackett             | torrent feeder for sonarr and radarr |
-| 8191  | Flaresolverr        | cloud flare site protection solver   |
-| 7878  | Radarr              | movie scheduler                      |
-| 8989  | Sonarr              | series scheduler                     | 
+| port  | service          | description                          |
+|-------|------------------|--------------------------------------|
+| 80    | dashboard        | quicklinks to all applications       | 
+| 81    | pi.hole          | block adds via dns in your network   |
+| 9091  | transmission     | torrent client                       | 
+| 9117  | Jackett          | torrent feeder for sonarr and radarr |
+| 8191  | Flaresolverr     | cloud flare site protection solver   |
+| 7878  | Radarr           | movie scheduler                      |
+| 8989  | Sonarr           | series scheduler                     | 
+| 8096  | Jellyfin         | media server                         |
+| 8443  | Swag (jellyfin)  | reverse proxy for public https       |
 
 # Configuration
 
@@ -29,6 +31,11 @@
 ## Configure indexers
 
 - Open jackett > add indexer > Follow instructions in jackett to add to sonarr 
+
+## Configure jellyfin + swag
+- https://jellyfin.org/docs/general/post-install/networking/advanced/letsencrypt/
+- Api token: https://dash.cloudflare.com/profile/api-tokens
+- DNS settings: Cloudflare: Home > Choose domain > DNS > records
 
 # Maintenance
 
