@@ -1,4 +1,162 @@
 services:
+  lighttpd-dashboard:
+    container_name: lighttpd-dashboard
+    image: sebp/lighttpd
+    volumes:
+      - './dashboard/:/var/www/localhost/htdocs'
+    ports:
+      - "80:80"
+    tty: true
+    restart: unless-stopped
+
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    environment:
+      - TZ=Europe/Amsterdam
+      - WEBPASSWORD=${PIHOLE_PASSWORD}
+    volumes:
+      - '${MEDIA_HOME}/etc-pihole:/etc/pihole'
+      - '${MEDIA_HOME}/etc-dnsmasq.d:/etc/dnsmasq.d'
+    ports:
+      - '81:80'
+      - '53:53/tcp'
+      - '53:53/udp'
+    dns:
+      - 127.0.0.1
+      - 8.8.8.8
+    restart: unless-stopped
+    healthcheck:
+      test: curl localhost/admin/login.php --fail
+      interval: 1s
+      timeout: 5s
+      retries: 30
+
+  transmission-openvpn:
+    container_name: transmission-openvpn
+    image: haugene/transmission-openvpn:4
+    environment:
+      - PUID=1000
+      - PGID=100
+      - CREATE_TUN_DEVICE=true
+      - OPENVPN_PROVIDER=${OPENVPN_PROVIDER:-SURFSHARK}
+      - OPENVPN_CONFIG=nl-ams.prod.surfshark.com_tcp
+      - OPENVPN_USERNAME=${OPENVPN_USERNAME}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60
+      - WEBPROXY_ENABLED=false
+      - LOCAL_NETWORK=192.168.0.0/16
+      - TRANSMISSION_SCRAPE_PAUSED_TORRENTS_ENABLED=false
+      - DNS=8.8.8.8,8.8.4.4
+      - TRANSMISSION_ALT_SPEED_DOWN=76800
+      - TRANSMISSION_ALT_SPEED_ENABLED=true
+      - TRANSMISSION_ALT_SPEED_TIME_BEGIN=360
+      - TRANSMISSION_ALT_SPEED_TIME_DAY=127
+      - TRANSMISSION_ALT_SPEED_TIME_ENABLED=true
+      - TRANSMISSION_ALT_SPEED_TIME_END=1380
+      - TRANSMISSION_ALT_SPEED_UP=10240
+      - TRANSMISSION_IDLE_SEEDING_LIMIT=5
+      - TRANSMISSION_IDLE_SEEDING_LIMIT_ENABLED=true
+      - TRANSMISSION_SCRIPT_TORRENT_DONE_ENABLED=false
+      - TRANSMISSION_SCRIPT_TORRENT_DONE_FILENAME=/usr/bin/remove-torrent.sh
+      - TRANSMISSION_DOWNLOAD_DIR=/downloads
+      - TRANSMISSION_INCOMPLETE_DIR=/data/incomplete
+      - TRANSMISSION_WATCH_DIR=/data/watch
+      - TRANSMISSION_HOME=/data/transmission-home
+      - TRANSMISSION_WEB_UI=flood-for-transmission
+    volumes:
+      - '${MEDIA_HOME}/media/downloads:/downloads'
+      - '${MEDIA_HOME}/transmission/incomplete/:/data/incomplete'
+      - '${MEDIA_HOME}/transmission/transmission-home:/data/transmission-home'
+      - '${MEDIA_HOME}/transmission/watch/:/data/watch'
+      - '/opt/transmission-openvpn/config/:/config'
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - '9091:9091' # Transmission
+      - '9117:9117' # Jackett
+      - '8191:8191' # Flaresolverr
+      - '7878:7878' # Radarr
+      - '8989:8989' # Sonarr
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+    restart: unless-stopped
+    depends_on:
+      - pihole
+
+  jackett:
+    image: linuxserver/jackett
+    network_mode: "service:transmission-openvpn"
+    container_name: jackett
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Amsterdam
+      - AUTO_UPDATE=true #optional
+      - RUN_OPTS=#optional
+    volumes:
+      - /var/lib/appdata/jackett:/config
+      - '${MEDIA_HOME}/transmission/watch:/downloads'
+    restart: unless-stopped
+    depends_on:
+      - pihole
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    network_mode: "service:transmission-openvpn"
+    container_name: flaresolverr
+    environment:
+      - PUID=1000
+      - PGID=100
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=Europe/Amsterdam
+    restart: unless-stopped
+    depends_on:
+      - pihole
+
+  radarr:
+    image: linuxserver/radarr:latest
+    network_mode: "service:transmission-openvpn"
+    container_name: radarr
+    environment:
+      - PUID=1024
+      - PGID=100
+      - TZ=Europe/Amsterdam
+      - UMASK_SET=022 #optional
+    volumes:
+      - /var/lib/appdata/radarr:/config
+      - '${MEDIA_HOME}/media/movies:/movies'
+      - '${MEDIA_HOME}/media/downloads:/downloads'
+    restart: unless-stopped
+    depends_on:
+      - pihole
+      - transmission-openvpn
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    network_mode: "service:transmission-openvpn"
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Amsterdam
+      - UMASK_SET=022 #optional
+    volumes:
+      - /var/lib/appdata/sonarr:/config
+      - '${MEDIA_HOME}/media/tv:/tv'
+      - '${MEDIA_HOME}/media/downloads:/downloads'
+    restart: unless-stopped
+    depends_on:
+      - pihole
+      - transmission-openvpn
+
   # jellyfin media server.
   jellyfin:
     image: jellyfin/jellyfin
