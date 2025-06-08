@@ -17,6 +17,3 @@ services:
         read_only: true
     restart: 'unless-stopped'
 
-# docker run -d  --name jellyfin     --mount type=bind,source=/home/fdekker/media/movies,target=/media1 --mount type=bind,source=/mnt/samsung/tv,target=/media2 -p 8096:8096 --restart=unless-stopped  jellyfin/jellyfin
-#  docker run -d  --name jellyfin     --mount type=bind,source=/home/fdekker/media,target=/media --mount type=bind,source=/mnt/samsung/tv,target=/media2 -p 8096:8096 --restart=unless-stopped  jellyfin/jellyfin
-
