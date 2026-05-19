@@ -85,9 +85,10 @@ services:
       driver: json-file
       options:
         max-size: 10m
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     restart: unless-stopped
-    depends_on:
-      - pihole
 
   jackett:
     image: linuxserver/jackett
@@ -119,8 +120,6 @@ services:
       - CAPTCHA_SOLVER=none
       - TZ=Europe/Amsterdam
     restart: unless-stopped
-    depends_on:
-      - pihole
 
   radarr:
     image: linuxserver/radarr:latest
