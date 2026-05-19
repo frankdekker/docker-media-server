@@ -15,6 +15,7 @@ services:
     environment:
       - TZ=Europe/Amsterdam
       - WEBPASSWORD=${PIHOLE_PASSWORD}
+      - DNSMASQ_LISTENING=all
     volumes:
       - '${MEDIA_HOME}/etc-pihole:/etc/pihole'
       - '${MEDIA_HOME}/etc-dnsmasq.d:/etc/dnsmasq.d'
