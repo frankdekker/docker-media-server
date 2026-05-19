@@ -4,6 +4,10 @@ services:
     image: sebp/lighttpd
     volumes:
       - './dashboard/:/var/www/localhost/htdocs'
+      - './dashboard/cgi-bin:/var/www/localhost/cgi-bin'
+      - './lighttpd/lighttpd.conf:/etc/lighttpd/lighttpd.conf'
+      - '/home/:/host/home:ro'
+      - '/mnt/samsung:/host/samsung:ro'
     ports:
       - "80:80"
     tty: true

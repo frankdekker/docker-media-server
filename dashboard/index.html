@@ -15,13 +15,13 @@
 
         :root {
             --bg:          #080c14;
-            --glow:        rgba(96, 165, 250, 0.06);
             --card-bg:     rgba(255, 255, 255, 0.04);
             --card-border: rgba(255, 255, 255, 0.07);
             --card-hover:  rgba(255, 255, 255, 0.09);
             --text:        #e2e8f0;
             --muted:       #4b5563;
             --port-color:  #6b7280;
+            --divider:     rgba(255, 255, 255, 0.06);
         }
 
         body {
@@ -60,20 +60,34 @@
             font-variant-numeric: tabular-nums;
         }
 
-        /* ── Grid ── */
+        /* ── Section label ── */
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 0 1.5rem;
+            margin-bottom: 0.75rem;
+            max-width: 960px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ── Service grid ── */
         main {
-            flex: 1;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 1rem;
-            padding: 1.5rem;
+            padding: 0.25rem 1.5rem 0;
             max-width: 960px;
             width: 100%;
             margin: 0 auto;
             align-content: start;
         }
 
-        /* ── Cards ── */
+        /* ── Service cards ── */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -142,12 +156,118 @@
         .c-teal   { background: linear-gradient(135deg, #0f766e, #0d9488); }
         .c-green  { background: linear-gradient(135deg, #14532d, #16a34a); }
 
+        /* ── Divider ── */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--divider);
+            max-width: 960px;
+            width: calc(100% - 3rem);
+            margin: 2rem auto 1.5rem;
+        }
+
+        /* ── Storage section ── */
+        .disk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+            padding: 0 1.5rem;
+            max-width: 960px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .disk-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 1.25rem 1.25rem 1.1rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .disk-card.is-loading {
+            opacity: 0.4;
+            animation: pulse 1.4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50%       { opacity: 0.2; }
+        }
+
+        .disk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.2rem;
+        }
+
+        .disk-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .disk-pct {
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .pct-green { color: #34d399; }
+        .pct-amber { color: #fbbf24; }
+        .pct-red   { color: #f87171; }
+
+        .disk-device {
+            font-size: 0.68rem;
+            color: var(--muted);
+            font-family: 'Courier New', monospace;
+            margin-bottom: 0.75rem;
+        }
+
+        .disk-bar-track {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 99px;
+            overflow: hidden;
+            margin-bottom: 0.65rem;
+        }
+
+        .disk-bar-fill {
+            height: 100%;
+            border-radius: 99px;
+            transition: width 0.5s ease;
+        }
+
+        .disk-stats {
+            font-size: 0.7rem;
+            color: var(--muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .disk-error-msg {
+            font-size: 0.8rem;
+            color: #f87171;
+            text-align: center;
+            padding: 0.5rem 0;
+        }
+
         /* ── Footer ── */
         footer {
             text-align: center;
-            padding: 1.5rem;
+            padding: 1.75rem 1.5rem 1.5rem;
             font-size: 0.72rem;
             color: var(--muted);
+            margin-top: auto;
+        }
+
+        #disk-refresh {
+            display: block;
+            text-align: center;
+            font-size: 0.68rem;
+            color: var(--muted);
+            margin: 0.75rem auto 0;
+            max-width: 960px;
+            padding: 0 1.5rem;
         }
     </style>
 </head>
@@ -158,6 +278,7 @@
     <div id="clock"></div>
 </header>
 
+<p class="section-label">Services</p>
 <main>
 
     <a href="/admin" data-role="link" data-port="81" class="card">
@@ -216,7 +337,28 @@
 
 </main>
 
-<footer>Opens each service in a new tab &nbsp;·&nbsp; <span id="host-hint"></span></footer>
+<hr class="divider">
+
+<p class="section-label">Storage</p>
+<div class="disk-grid" id="disk-grid">
+    <div class="disk-card is-loading">
+        <div class="disk-header"><span class="disk-label">TV series (NVMe)</span></div>
+        <div class="disk-device">/dev/nvme0n1p2</div>
+        <div class="disk-bar-track"><div class="disk-bar-fill" style="width:0%"></div></div>
+        <div class="disk-stats"><span>—</span><span>—</span><span>—</span></div>
+    </div>
+    <div class="disk-card is-loading">
+        <div class="disk-header"><span class="disk-label">Movies (HDD)</span></div>
+        <div class="disk-device">/dev/sda1</div>
+        <div class="disk-bar-track"><div class="disk-bar-fill" style="width:0%"></div></div>
+        <div class="disk-stats"><span>—</span><span>—</span><span>—</span></div>
+    </div>
+</div>
+<span id="disk-refresh"></span>
+
+<footer>
+    <span id="host-hint"></span>
+</footer>
 
 <script>
     // Clock
@@ -230,7 +372,6 @@
     tick();
     setInterval(tick, 1000);
 
-    // Host hint in footer
     document.getElementById('host-hint').textContent = location.hostname;
 
     // Card navigation
@@ -243,6 +384,65 @@
             if (tab) tab.focus();
         });
     });
+
+    // Disk usage
+    function fmt(mb) {
+        if (mb >= 1024 * 1024) return (mb / 1024 / 1024).toFixed(1) + ' TB';
+        if (mb >= 1024)        return (mb / 1024).toFixed(1) + ' GB';
+        return mb.toFixed(0) + ' MB';
+    }
+
+    function barColor(pct) {
+        if (pct >= 85) return 'linear-gradient(90deg, #7f1d1d, #ef4444)';
+        if (pct >= 70) return 'linear-gradient(90deg, #78350f, #f59e0b)';
+        return 'linear-gradient(90deg, #064e3b, #10b981)';
+    }
+
+    function pctClass(pct) {
+        if (pct >= 85) return 'pct-red';
+        if (pct >= 70) return 'pct-amber';
+        return 'pct-green';
+    }
+
+    async function loadDiskUsage() {
+        try {
+            const res = await fetch('/cgi-bin/diskspace');
+            if (!res.ok) throw new Error(res.status);
+            const data = await res.json();
+
+            document.getElementById('disk-grid').innerHTML = data.disks.map(d => {
+                if (d.error) {
+                    return `<div class="disk-card">
+                        <div class="disk-header"><span class="disk-label">${d.label}</span></div>
+                        <div class="disk-device">${d.device}</div>
+                        <p class="disk-error-msg"><i class="fa-solid fa-triangle-exclamation"></i> Unavailable</p>
+                    </div>`;
+                }
+                return `<div class="disk-card">
+                    <div class="disk-header">
+                        <span class="disk-label">${d.label}</span>
+                        <span class="disk-pct ${pctClass(d.pct)}">${d.pct}%</span>
+                    </div>
+                    <div class="disk-device">${d.device}</div>
+                    <div class="disk-bar-track">
+                        <div class="disk-bar-fill" style="width:${d.pct}%;background:${barColor(d.pct)}"></div>
+                    </div>
+                    <div class="disk-stats">
+                        <span>${fmt(d.free)} free</span>
+                    </div>
+                </div>`;
+            }).join('');
+
+            document.getElementById('disk-refresh').textContent =
+                'Updated at ' + new Date().toLocaleTimeString('nl-NL');
+        } catch (e) {
+            document.getElementById('disk-grid').innerHTML =
+                '<p class="disk-error-msg" style="padding:1rem"><i class="fa-solid fa-triangle-exclamation"></i> Could not load disk data</p>';
+        }
+    }
+
+    loadDiskUsage();
+    setInterval(loadDiskUsage, 5 * 60 * 1000);
 </script>
 
 </body>

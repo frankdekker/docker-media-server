@@ -1,0 +1,24 @@
+#!/bin/sh
+printf 'Content-Type: application/json\r\n'
+printf 'Cache-Control: no-cache\r\n'
+printf '\r\n'
+
+disk_json() {
+    path=$1 label=$2 device=$3
+    result=$(df -kP "$path" 2>/dev/null | tail -1)
+    if [ -z "$result" ]; then
+        printf '{"label":"%s","device":"%s","error":"unavailable"}' "$label" "$device"
+        return
+    fi
+    printf '%s' "$result" | awk -v label="$label" -v device="$device" '{
+        size=$2/1024; used=$3/1024; free=$4/1024
+        pct=0; if (size>0) pct=int(used*100/size)
+        printf "{\"label\":\"%s\",\"device\":\"%s\",\"size\":%.0f,\"used\":%.0f,\"free\":%.0f,\"pct\":%d}",
+               label, device, size, used, free, pct
+    }'
+}
+
+nvme=$(disk_json    /host/home    "System (NVMe)"  "/dev/nvme0n1p2")
+samsung=$(disk_json /host/samsung "Media (HDD)"    "/dev/sda1")
+
+printf '{"disks":[%s,%s]}' "$nvme" "$samsung"
