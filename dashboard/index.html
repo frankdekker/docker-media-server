@@ -239,8 +239,6 @@
         }
 
         .disk-stats {
-            display: flex;
-            justify-content: space-between;
             font-size: 0.7rem;
             color: var(--muted);
             font-variant-numeric: tabular-nums;
@@ -388,10 +386,10 @@
     });
 
     // Disk usage
-    function fmt(bytes) {
-        if (bytes >= 1e12) return (bytes / 1e12).toFixed(1) + ' TB';
-        if (bytes >= 1e9)  return (bytes / 1e9).toFixed(1) + ' GB';
-        return (bytes / 1e6).toFixed(0) + ' MB';
+    function fmt(mb) {
+        if (mb >= 1024 * 1024) return (mb / 1024 / 1024).toFixed(1) + ' TB';
+        if (mb >= 1024)        return (mb / 1024).toFixed(1) + ' GB';
+        return mb.toFixed(0) + ' MB';
     }
 
     function barColor(pct) {
@@ -430,9 +428,7 @@
                         <div class="disk-bar-fill" style="width:${d.pct}%;background:${barColor(d.pct)}"></div>
                     </div>
                     <div class="disk-stats">
-                        <span>${fmt(d.used)} used</span>
                         <span>${fmt(d.free)} free</span>
-                        <span>${fmt(d.size)} total</span>
                     </div>
                 </div>`;
             }).join('');

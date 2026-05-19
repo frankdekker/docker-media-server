@@ -11,9 +11,9 @@ disk_json() {
         return
     fi
     printf '%s' "$result" | awk -v label="$label" -v device="$device" '{
-        size=$2*1024; used=$3*1024; free=$4*1024
+        size=$2/1024; used=$3/1024; free=$4/1024
         pct=0; if (size>0) pct=int(used*100/size)
-        printf "{\"label\":\"%s\",\"device\":\"%s\",\"size\":%d,\"used\":%d,\"free\":%d,\"pct\":%d}",
+        printf "{\"label\":\"%s\",\"device\":\"%s\",\"size\":%.0f,\"used\":%.0f,\"free\":%.0f,\"pct\":%d}",
                label, device, size, used, free, pct
     }'
 }
