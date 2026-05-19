@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.98.0">
     <title>Frank's Plex</title>
 
@@ -36,9 +35,8 @@
     </header>
 
     <div class="container">
-
         <a href="/admin" data-role="link" data-port="81" class="btn-width btn btn-lg btn-secondary"> Pi.hole admin </a>
-        <a href="/web/index.html" data-role="link" data-port="32400" class="btn-width btn btn-lg btn-primary"> Plex admin </a>
+        <a href="/" data-role="link" data-port="8096" class="btn-width btn btn-lg btn-primary">Jellyfin </a>
         <a href="/" data-role="link" data-port="9091" class="btn-width btn btn-lg btn-dark"> Transmission </a>
         <a href="/" data-role="link" data-port="8989" class="btn-width btn btn-lg btn-success"> Sonarr </a>
         <a href="/" data-role="link" data-port="7878" class="btn-width btn btn-lg btn-danger"> Radarr </a>
@@ -52,8 +50,14 @@
 
 <script>
     document.querySelectorAll('[data-role=link]').forEach((el) => {
-        el.addEventListener('click', event => event.target.port = parseInt(el.dataset.port));
-    })
+        el.addEventListener('click', event => {
+            event.preventDefault();
+            const url = new URL(el.href, location.href);
+            url.port = el.dataset.port;
+            const tab = window.open(url.toString(), '_blank');
+            if (tab) tab.focus();
+        });
+    });
 </script>
 
 </body>
