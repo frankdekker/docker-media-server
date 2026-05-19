@@ -104,7 +104,8 @@ services:
       - '${MEDIA_HOME}/transmission/watch:/downloads'
     restart: unless-stopped
     depends_on:
-      - pihole
+      transmission-openvpn:
+        condition: service_healthy
 
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
@@ -136,8 +137,8 @@ services:
       - '${MEDIA_HOME}/media/downloads:/downloads'
     restart: unless-stopped
     depends_on:
-      - pihole
-      - transmission-openvpn
+      transmission-openvpn:
+        condition: service_healthy
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -154,8 +155,8 @@ services:
       - '${MEDIA_HOME}/media/downloads:/downloads'
     restart: unless-stopped
     depends_on:
-      - pihole
-      - transmission-openvpn
+      transmission-openvpn:
+        condition: service_healthy
 
   # jellyfin media server.
   jellyfin:
